@@ -1,0 +1,7 @@
+{
+    "token": "YOUR_BOT_TOKEN_HERE",
+    "owner": "BOT_OWNER_ID_HERE",
+    "prefix": "$",
+    "bot_name": "QuoteBot",
+    "avatar": "avatar.png"
+}
