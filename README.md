@@ -1,17 +1,14 @@
 ## Quote bot for Discord
 ---
 
-#### Prefix: `$`
----
-
-#### Requirements
+**Requirements**
 - [Python 3.6](https://www.python.org/downloads/)
   - You might have to check "Pre-releases" depending on when you're setting this up.
 - [Discord.py](https://github.com/Rapptz/discord.py)
   - Use the non-voice option for less headaches, this bot doesn't use voice.
 ---
 
-#### Setup
+**Setup**
 - Install requirements
 - Clone or download this repo
 - Configure the bot's `config.json`
