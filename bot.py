@@ -11,13 +11,16 @@ VERSION = "1.1.0"
 with open("config.json") as cfg:
     config = json.load(cfg)
 
-# Grab the database
+# Grab the databases
 with open("db.json") as dtb:
     db = json.load(dtb)
 
+with open("nsfw.json") as nsfwf:
+    nsfw = json.load(nsfwf)
+
 # Helper command to update the database
-def update_db(database):
-    with open("db.json", "w") as dtb:
+def update_db(database, filename):
+    with open(filename, "w") as dtb:
         json.dump(database, dtb, indent=4)
 
 description="""
@@ -103,7 +106,7 @@ async def quote_new(name, *, body: str):
     quote_body = f"<{name}> {body}"
     if quote_body not in db["quotes"]:
         db["quotes"].append(quote_body)
-        update_db(db)
+        update_db(db, "db.json")
         await bot.say("Quote added.")
     else:
         await bot.say("That quote already exists.")
@@ -116,9 +119,47 @@ async def quote_remove(*, body: str):
     """
     if body in db["quotes"]:
         db["quotes"].remove(body)
-        update_db(db)
+        update_db(db, "db.json")
         await bot.say("Quote removed.")
     else:
         await bot.say("Quote doesn't exist.")
+
+@bot.group(name="nsfw", pass_context=True)
+async def nsfw_c(ctx):
+    """Not safe for work quotes!
+
+    Running the command without any arguments will display a random NSFW quote.
+    """
+    if ctx.invoked_subcommand is None:
+        try:
+            nsfw_body = random.choice(nsfw["quotes"])
+        except IndexError:
+            await bot.say("There are no NSFW quotes.")
+            return
+        await bot.say(nsfw_body)
+
+@nsfw_c.command(name="add", aliases=["new", "create"])
+async def nsfw_new(name, *, body: str):
+    """Add a new NSFW quote."""
+    nsfw_body = f"<{name}> {body}"
+    if nsfw_body not in nsfw["quotes"]:
+        nsfw["quotes"].append(nsfw_body)
+        update_db(nsfw, "nsfw.json")
+        await bot.say("NSFW quote added.")
+    else:
+        await bot.say("That NSFW quote already exists.")
+
+@nsfw_c.command(name="remove", aliases=["del", "destroy"])
+async def nsfw_remove(*, body: str):
+    """Remove an NSFW quote.
+
+    Copy/Paste the entire line of an NSFW quote to remove it.
+    """
+    if body in nsfw["quotes"]:
+        nsfw["quotes"].remove(body)
+        update_db(nsfw, "nsfw.json")
+        await bot.say("NSFW quote removed.")
+    else:
+      	await bot.say("NSFW quote doesn't exist.")
 
 bot.run(config["token"])
