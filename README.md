@@ -6,7 +6,6 @@
   - You might have to check "Pre-releases" depending on when you're setting this up.
 - [Discord.py](https://github.com/Rapptz/discord.py)
   - Use the non-voice option for less headaches, this bot doesn't use voice.
----
 
 **Setup**
 - Install requirements
